@@ -1,0 +1,100 @@
+﻿<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css.css">
+        <script>
+            /**************************************************************
+             * 関数名：テキストダウンロード処理
+             * 
+             * 概要：テキストエリアに入力されている内容をテキストファイル化し、
+             *       ダウンロードを行う。
+             * 
+             **************************************************************/
+            function downloadText() {
+                // テキストエリアの値を取得する。
+                var strText = document.getElementById('text').value;
+                // ファイル名を取得する。空の場合は、初期値を再設定する。
+                var strFileName = document.getElementById('fileName').value || 'downloadText';
+                // テキストファイルを作成する。
+                var blobText = new Blob( [strText], {type: 'text/plain'} );
+                
+                // リンクを取得する。
+                var linkText = document.getElementById('downloadLink') ;
+                // リンクに、ダウンロードするファイルをセットする。
+                linkText.href = window.URL.createObjectURL(blobText);
+                
+                // リンクがダウンロード属性に対応している場合、直接ダウンロードを行う。
+                if ('download' in linkText){
+                    //リンクに、ダウンロードする名前をセットする。
+                    linkText.download = strFileName + '.txt';
+                    //リンクのクリック処理を実行し、ダウンロードする。
+                    linkText.click();
+
+                // リンクがダウンロード属性に対応していない場合、手動でファイル保存を促す。
+                } else {
+                    //メッセージを表示する
+                    linkText.textContent = '右クリックから「名前を付けて保存」を選択して下さい。';
+                }
+            }
+            
+            /**************************************************************
+             * 関数名：文字サイズ変更
+             * 
+             * 概要：テキストエリア内の入力文字サイズを変更する。
+             * 
+             **************************************************************/
+            function resizeText() {
+                document.getElementById('text').style.fontSize = document.getElementById('textSize').value;
+            }
+            
+            function changeFont() {
+                document.getElementById('text').style.fontFamily = document.getElementById('textFont').value;
+            }
+            
+        </script>
+    </head>
+    <body>
+        <form>
+            <div class="box" style="width:97%">
+                <span class="box-title">ファイル出力（ダウンロード）</span>
+                <div style="display:flex">
+                    <div style="width:200"><button onclick="downloadText()">ファイルをダウンロード</button></div>
+                    <div style="width:400">ファイル名：<input id="fileName" placeholder="downloadText">.txt</div>
+                </div>
+            </div>
+            <div class="box" style="width:97%">
+                <span class="box-title">設定</span>
+                <div style="display:flex">
+                    <div style="width:200">文字サイズ：
+                        <select id="textSize" onChange="resizeText()">
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15" selected>15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                    <div style="width:400">フォント：
+                        <select id="textFont" onChange="changeFont()">
+                            <option value="メイリオ" selected>メイリオ</option>
+                            <option value="ＭＳ ゴシック">ＭＳ ゴシック</option>
+                            <option value="ＭＳ 明朝">ＭＳ 明朝</option>
+                            <option value="HG行書体">HG行書体</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div style="width:100%">
+                <textarea id="text" style="width:100%;height:100%;font-family:'メイリオ';font-size:15;"></textarea>
+            </div>
+        </form>
+        <a id='downloadLink'></a>
+    </body>
+</html>
